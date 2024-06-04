@@ -12,8 +12,8 @@ using Sommelio.Data;
 namespace Sommelio.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240424160551_3d")]
-    partial class _3d
+    [Migration("20240520141328_1s")]
+    partial class _1s
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,9 +21,9 @@ namespace Sommelio.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.2")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("Sommelio.Entities.Address", b =>
                 {
@@ -31,27 +31,27 @@ namespace Sommelio.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Country")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("GpsCoordinates")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Street")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("ZipCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -64,15 +64,15 @@ namespace Sommelio.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Beer");
+                    b.ToTable("Beers");
                 });
 
             modelBuilder.Entity("Sommelio.Entities.Cepage", b =>
@@ -81,15 +81,36 @@ namespace Sommelio.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cepage");
+                    b.ToTable("Cepages");
+                });
+
+            modelBuilder.Entity("Sommelio.Entities.ColorsBtn", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ColorCode")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ColorsBtn");
                 });
 
             modelBuilder.Entity("Sommelio.Entities.Company", b =>
@@ -98,22 +119,22 @@ namespace Sommelio.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AddressId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("PictureUrl")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("Userid")
                         .HasColumnType("int");
@@ -124,7 +145,7 @@ namespace Sommelio.Migrations
 
                     b.HasIndex("Userid");
 
-                    b.ToTable("Company");
+                    b.ToTable("Companies");
                 });
 
             modelBuilder.Entity("Sommelio.Entities.CompanyProduct", b =>
@@ -139,7 +160,7 @@ namespace Sommelio.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CompanyProduct");
+                    b.ToTable("CompanyProducts");
                 });
 
             modelBuilder.Entity("Sommelio.Entities.Country", b =>
@@ -148,15 +169,15 @@ namespace Sommelio.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Country");
+                    b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("Sommelio.Entities.Delicacies", b =>
@@ -165,13 +186,23 @@ namespace Sommelio.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ColorId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("parentId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ColorId");
+
+                    b.HasIndex("parentId");
 
                     b.ToTable("Delicacies");
                 });
@@ -188,7 +219,7 @@ namespace Sommelio.Migrations
 
                     b.HasIndex("DelicaciesId");
 
-                    b.ToTable("DelicaciesWine");
+                    b.ToTable("DelicaciesWines");
                 });
 
             modelBuilder.Entity("Sommelio.Entities.Events", b =>
@@ -197,7 +228,7 @@ namespace Sommelio.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AddressId")
                         .HasColumnType("int");
@@ -207,21 +238,21 @@ namespace Sommelio.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("PictureUrl")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
@@ -238,19 +269,19 @@ namespace Sommelio.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ParticularId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("EventId");
 
-                    b.HasIndex("ParticularId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("FavEvents");
                 });
@@ -261,18 +292,18 @@ namespace Sommelio.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Milestone")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.ToTable("FidelityRank");
+                    b.ToTable("FidelityRanks");
                 });
 
             modelBuilder.Entity("Sommelio.Entities.Product", b =>
@@ -281,7 +312,7 @@ namespace Sommelio.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BeerId")
                         .HasColumnType("int");
@@ -295,7 +326,7 @@ namespace Sommelio.Migrations
 
                     b.HasIndex("WineId");
 
-                    b.ToTable("Product");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Sommelio.Entities.ProfessionalType", b =>
@@ -304,15 +335,40 @@ namespace Sommelio.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProfessionalType");
+                    b.ToTable("ProfessionalTypes");
+                });
+
+            modelBuilder.Entity("Sommelio.Entities.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("Sommelio.Entities.Region", b =>
@@ -321,20 +377,20 @@ namespace Sommelio.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("Region");
+                    b.ToTable("Regions");
                 });
 
             modelBuilder.Entity("Sommelio.Entities.ScannedUser", b =>
@@ -342,14 +398,14 @@ namespace Sommelio.Migrations
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ParticularId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("CompanyId", "ParticularId");
+                    b.HasKey("CompanyId", "UserId");
 
-                    b.HasIndex("ParticularId");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("ScannedUser");
+                    b.ToTable("ScannedUsers");
                 });
 
             modelBuilder.Entity("Sommelio.Entities.TypeApellation", b =>
@@ -358,11 +414,11 @@ namespace Sommelio.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -375,41 +431,71 @@ namespace Sommelio.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AddressId")
+                    b.Property<int?>("AddressId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("FidelityGradeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("FidelityPoints")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("InscriptionDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("ProfilePictureUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
-                    b.Property<string>("Username")
+                    b.Property<string>("QRCode")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Surname")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("UserTypeId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
 
-                    b.ToTable("User");
+                    b.HasIndex("FidelityGradeId");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
+                    b.HasIndex("UserTypeId");
 
-                    b.UseTphMappingStrategy();
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Sommelio.Entities.UserType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserTypes");
                 });
 
             modelBuilder.Entity("Sommelio.Entities.Wine", b =>
@@ -418,33 +504,33 @@ namespace Sommelio.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<double>("AlcoholDegrees")
-                        .HasColumnType("float");
+                        .HasColumnType("double");
 
                     b.Property<int>("CepageId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Embouteilleur")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("PictureUrl")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Producer")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("RegionId")
                         .HasColumnType("int");
@@ -468,7 +554,7 @@ namespace Sommelio.Migrations
 
                     b.HasIndex("WineTypeId");
 
-                    b.ToTable("Wine");
+                    b.ToTable("Wines");
                 });
 
             modelBuilder.Entity("Sommelio.Entities.WineType", b =>
@@ -477,49 +563,20 @@ namespace Sommelio.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ColorId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.ToTable("WineType");
-                });
+                    b.HasIndex("ColorId");
 
-            modelBuilder.Entity("Sommelio.Entities.Particular", b =>
-                {
-                    b.HasBaseType("Sommelio.Entities.User");
-
-                    b.Property<int>("FidelityGradeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FidelityPoints")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ParticularId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("QRCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasIndex("FidelityGradeId");
-
-                    b.HasDiscriminator().HasValue("Particular");
-                });
-
-            modelBuilder.Entity("Sommelio.Entities.Professional", b =>
-                {
-                    b.HasBaseType("Sommelio.Entities.User");
-
-                    b.Property<int>("ProfessionalTypeId")
-                        .HasColumnType("int");
-
-                    b.HasIndex("ProfessionalTypeId");
-
-                    b.HasDiscriminator().HasValue("Professional");
+                    b.ToTable("WineTypes");
                 });
 
             modelBuilder.Entity("Sommelio.Entities.Company", b =>
@@ -558,6 +615,23 @@ namespace Sommelio.Migrations
                     b.Navigation("Company");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Sommelio.Entities.Delicacies", b =>
+                {
+                    b.HasOne("Sommelio.Entities.ColorsBtn", "ColorsBtn")
+                        .WithMany()
+                        .HasForeignKey("ColorId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Sommelio.Entities.Delicacies", "parent")
+                        .WithMany()
+                        .HasForeignKey("parentId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("ColorsBtn");
+
+                    b.Navigation("parent");
                 });
 
             modelBuilder.Entity("Sommelio.Entities.DelicaciesWine", b =>
@@ -606,15 +680,15 @@ namespace Sommelio.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Sommelio.Entities.Particular", "Particular")
+                    b.HasOne("Sommelio.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("ParticularId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Events");
 
-                    b.Navigation("Particular");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Sommelio.Entities.Product", b =>
@@ -636,6 +710,17 @@ namespace Sommelio.Migrations
                     b.Navigation("Wine");
                 });
 
+            modelBuilder.Entity("Sommelio.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("Sommelio.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Sommelio.Entities.Region", b =>
                 {
                     b.HasOne("Sommelio.Entities.Country", "Country")
@@ -655,15 +740,15 @@ namespace Sommelio.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Sommelio.Entities.Particular", "Particular")
+                    b.HasOne("Sommelio.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("ParticularId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Company");
 
-                    b.Navigation("Particular");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Sommelio.Entities.User", b =>
@@ -671,10 +756,24 @@ namespace Sommelio.Migrations
                     b.HasOne("Sommelio.Entities.Address", "Address")
                         .WithMany()
                         .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Sommelio.Entities.FidelityRank", "FidelityGrade")
+                        .WithMany()
+                        .HasForeignKey("FidelityGradeId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Sommelio.Entities.UserType", "UserType")
+                        .WithMany()
+                        .HasForeignKey("UserTypeId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Address");
+
+                    b.Navigation("FidelityGrade");
+
+                    b.Navigation("UserType");
                 });
 
             modelBuilder.Entity("Sommelio.Entities.Wine", b =>
@@ -712,26 +811,14 @@ namespace Sommelio.Migrations
                     b.Navigation("WineType");
                 });
 
-            modelBuilder.Entity("Sommelio.Entities.Particular", b =>
+            modelBuilder.Entity("Sommelio.Entities.WineType", b =>
                 {
-                    b.HasOne("Sommelio.Entities.FidelityRank", "FidelityGrade")
+                    b.HasOne("Sommelio.Entities.ColorsBtn", "ColorsBtn")
                         .WithMany()
-                        .HasForeignKey("FidelityGradeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ColorId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
-                    b.Navigation("FidelityGrade");
-                });
-
-            modelBuilder.Entity("Sommelio.Entities.Professional", b =>
-                {
-                    b.HasOne("Sommelio.Entities.ProfessionalType", "ProfessionalType")
-                        .WithMany()
-                        .HasForeignKey("ProfessionalTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ProfessionalType");
+                    b.Navigation("ColorsBtn");
                 });
 #pragma warning restore 612, 618
         }

@@ -49,11 +49,16 @@ namespace Sommelio.Services
                 Surname = user.Surname,
                 Email = user.Email,
                 ProfilePictureUrl = user.ProfilePictureUrl,
+                FidelityPoints = user.FidelityPoints,
+                inscriptionDate = user.InscriptionDate.ToString("dd/MM/yyyy"),
+                FidelityGrade = _context.FidelityRanks.FirstOrDefault(f => f.Id == user.FidelityGradeId).Name,
+                UserType = _context.UserTypes.FirstOrDefault(u => u.Id == user.UserTypeId).Name,
+                QRCode = null,
       
             };
         }
 
-        public async Task<ParticularDto> RegisterParticularAsync(UserRegisterDto User)
+        public async Task<UserDto> RegisterUser(UserRegisterDto User)
         {
             if (User == null)
             {
@@ -61,7 +66,7 @@ namespace Sommelio.Services
             }
 
             // Vérification si l'utilisateur existe déjà dans la base de données
-            var userExists = await _context.Particulars.AnyAsync(u => u.Email == User.Email);
+            var userExists = await _context.Users.AnyAsync(u => u.Email == User.Email);
 
             if (userExists)
             {
@@ -83,31 +88,34 @@ namespace Sommelio.Services
             }
 
             // Création d'une nouvelle entité utilisateur à partir du DTO
-            var userEntity = new Particular
+            var userEntity = new User
             {
                 Name = User.Name,
                 Surname = User.Surname,
                 Email = User.Email,
                 Password = Sha512(User.Password),
                 ProfilePictureUrl = null,
+                UserType = _context.UserTypes.FirstOrDefault(u => u.Name == User.UserType),
                 FidelityPoints = 0,
                 FidelityGradeId = 1,
-                QRCode = null
+                QRCode = null,
+                InscriptionDate = DateTime.Now
             };
 
             // Ajouter l'utilisateur à votre contexte de base de données
-            _context.Particulars.Add(userEntity);
+            _context.Users.Add(userEntity);
 
             // Enregistrer les modifications dans la base de données
             await _context.SaveChangesAsync();
 
             // Retourner une réponse Ok avec l'entité utilisateur ajoutée
-            var user = new ParticularDto
+            var user = new UserDto
             {
                 Id = userEntity.Id,
                 Name = userEntity.Name,
                 Surname = userEntity.Surname,
                 Email = userEntity.Email,
+                UserType = userEntity.UserType.Name,
                 ProfilePictureUrl = userEntity.ProfilePictureUrl,
                 FidelityPoints = userEntity.FidelityPoints,
                 FidelityGrade = _context.FidelityRanks.FirstOrDefault(f => f.Id == 1).Name,
@@ -116,55 +124,6 @@ namespace Sommelio.Services
 
             return user;
             
-        }
-
-        public async Task<ProfessionalDto> RegisterProfessionalAsync(ProfessionalDto User)
-        {
-            if (User == null)
-            {
-                throw new ArgumentNullException(nameof(User));
-            }
-            
-            // Vérification si l'utilisateur existe déjà dans la base de données
-            var userExists = await _context.Professionals.FirstOrDefaultAsync(u => u.Email == User.Email);
-
-            if (userExists != null)
-            {
-                // L'utilisateur existe déjà
-                return null;
-            }
-
-             
-            var ProfessionalType = _context.ProfessionalTypes.FirstOrDefault(pt => pt.Name == User.ProfessionalType);
-
-            // Création d'une nouvelle entité utilisateur à partir du DTO
-            var userEntity = new Professional
-            {
-                Name = User.Name,
-                Surname = User.Surname,
-                Email = User.Email,
-                Password = Sha512(User.Password),
-                ProfilePictureUrl = null,
-                ProfessionalTypeId = ProfessionalType.Id, 
-            };
-
-            // Ajouter l'utilisateur à votre contexte de base de données
-            _context.Professionals.Add(userEntity);
-
-            // Enregistrer les modifications dans la base de données
-            await _context.SaveChangesAsync();
-
-            // Retourner une réponse Ok avec l'entité utilisateur ajoutée
-            return new ProfessionalDto
-            {
-                Id = userEntity.Id,
-                Name = userEntity.Name,
-                Surname = userEntity.Surname,
-                Email = userEntity.Email,
-                ProfilePictureUrl = userEntity.ProfilePictureUrl,
-                ProfessionalType = ProfessionalType.Name,
-                // Autres propriétés d'utilisateur que vous souhaitez retourner
-            };
         }
 
         public string Sha512(string input)

@@ -9,12 +9,18 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<LoginService>();
 builder.Services.AddScoped<WineTypeService>();
 builder.Services.AddScoped<DelicaciesService>();
+builder.Services.AddScoped<EventsService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var serverVersion = new MySqlServerVersion(new Version(8, 0, 34));
+
 builder.Services.AddDbContext<DataContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), serverVersion)
+    .LogTo(Console.WriteLine, LogLevel.Information)
+                .EnableSensitiveDataLogging()
+                .EnableDetailedErrors();
 });
 
 var app = builder.Build();
@@ -26,7 +32,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
+
 
 // Add CORS policy
 app.UseCors(policy =>
@@ -41,3 +48,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+

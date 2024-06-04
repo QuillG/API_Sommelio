@@ -12,8 +12,6 @@ namespace Sommelio.Data
 
         public DbSet<Address> Addresses { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<Particular> Particulars { get; set; }
-        public DbSet<Professional> Professionals { get; set; }
         public DbSet<ProfessionalType> ProfessionalTypes { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<CompanyProduct> CompanyProducts { get; set; }
@@ -31,12 +29,24 @@ namespace Sommelio.Data
         public DbSet<FavEvents> FavEvents { get; set; }
         public DbSet<FidelityRank> FidelityRanks { get; set; }
         public DbSet<Country> Countries { get; set; }
-        public DbSet<RefreshToken> refreshTokens { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<UserType> UserTypes { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.UserType)
+                .WithMany()
+                .HasForeignKey(u => u.UserTypeId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.FidelityGrade)
+                .WithMany()
+                .HasForeignKey(u => u.FidelityGradeId)
+                .OnDelete(DeleteBehavior.NoAction);
             
             modelBuilder.Entity<Product>()
                 .HasOne(p => p.Beer)
@@ -102,9 +112,9 @@ namespace Sommelio.Data
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<ScannedUser>()
-                .HasOne(su => su.Particular)
+                .HasOne(su => su.User)
                 .WithMany()
-                .HasForeignKey(su => su.ParticularId)
+                .HasForeignKey(su => su.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<ScannedUser>()
@@ -132,15 +142,10 @@ namespace Sommelio.Data
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<FavEvents>()
-                .HasOne(fe => fe.Particular)
+                .HasOne(fe => fe.User)
                 .WithMany()
-                .HasForeignKey(fe => fe.ParticularId)
+                .HasForeignKey(fe => fe.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
-
-            modelBuilder.Entity<Professional>()
-                .HasOne(p => p.ProfessionalType)
-                .WithMany()
-                .HasForeignKey(p => p.ProfessionalTypeId);
 
             modelBuilder.Entity<CompanyProduct>()
                 .HasOne(cp => cp.Company)
@@ -185,8 +190,6 @@ namespace Sommelio.Data
                 .HasForeignKey(d => d.parentId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-
-
             modelBuilder.Entity<CompanyProduct>()
                 .HasKey(cp => new { cp.CompanyId, cp.ProductId });
 
@@ -194,7 +197,7 @@ namespace Sommelio.Data
                 .HasKey(dw => new { dw.WineId, dw.DelicaciesId });
 
             modelBuilder.Entity<ScannedUser>()
-                .HasKey(su => new { su.CompanyId, su.ParticularId });
+                .HasKey(su => new { su.CompanyId, su.UserId });
         }
 
 

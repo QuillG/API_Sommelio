@@ -94,10 +94,10 @@ namespace Sommelio.Controllers
             }
         }
 
-        [HttpPost("AddParticular")]
-        public async Task<ActionResult<ParticularDto>> AddUserParticular(UserRegisterDto user)
+        [HttpPost("AddUser")]
+        public async Task<ActionResult<UserDto>> AddUser(UserRegisterDto user)
         {
-            var NewUser = await _loginService.RegisterParticularAsync(user);
+            var NewUser = await _loginService.RegisterUser(user);
             if (NewUser == null)
             {
                 return BadRequest("User already exists");
@@ -105,16 +105,16 @@ namespace Sommelio.Controllers
             return Ok(NewUser);
         }
 
-        [HttpPost("AddProfessional")]
-        public async Task<ActionResult<ProfessionalDto>> AddUserProfessional(ProfessionalDto user)
-        {
-            var NewUser = await _loginService.RegisterProfessionalAsync(user);
-            if (NewUser == null)
-            {
-                return BadRequest("User already exists");
-            }
-            return Ok(NewUser);
-        }
+        //[HttpPost("AddProfessional")]
+        //public async Task<ActionResult<ProfessionalDto>> AddUserProfessional(ProfessionalDto user)
+        //{
+        //    var NewUser = await _loginService.RegisterProfessionalAsync(user);
+        //    if (NewUser == null)
+        //    {
+        //        return BadRequest("User already exists");
+        //    }
+        //    return Ok(NewUser);
+        //}
     }
 }
 
